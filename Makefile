@@ -5,12 +5,12 @@ CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRCS = srcs/codexion.c \
 	srcs/parsing.c \
-	srcs/parsing_utils.c \
+	srcs/coder.c \
 	srcs/utils.c
 
 OBJS = srcs/codexion.o \
 	srcs/parsing.o \
-	srcs/parsing_utils.o \
+	srcs/coder.o \
 	srcs/utils.o
 
 all: $(NAME)

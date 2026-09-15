@@ -10,6 +10,7 @@
 
 # include "parsing.h"
 # include "utils.h"
+#include "coder.h"
 
 typedef struct s_coder		t_coder;
 typedef struct s_request	t_request;
@@ -47,16 +48,11 @@ typedef struct s_coder
 	int				is_burnout;
 	int				compile_done;
 	int				step;
-	int				have_compiled;
-	int				have_debug;
-	int				have_refact;
-	int				dongle_hold;
-	pthread_t		thread;
-	t_dongle		*dongle;
-	t_coder			*next;
-	t_coder			*prev;
-	long long		last_compile_start;
 	t_all			*all;
+	t_dongle		*dongle_left;
+	t_dongle		*dongle_right;
+	long long		last_compile_start;
+	pthread_t		thread;
 }	t_coder;
 
 typedef struct s_all
