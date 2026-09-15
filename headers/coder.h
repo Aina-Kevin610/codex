@@ -5,5 +5,6 @@ typedef struct s_coder	t_coder;
 typedef struct s_all	t_all;
 
 int 	init_coder(t_all *all);
+int     init_dongle(t_all *all);
 
 #endif

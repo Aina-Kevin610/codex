@@ -9,7 +9,8 @@ int	main(int argc, char *argv[])
 		ft_error("ERROR - Invalid arguments!");
 		return (1);
 	}
+	init_dongle(&all);
 	init_coder(&all);
-	print_coders(all.coder, all.arguments->coders);
+	print_coders(&all);
 	return (0);
 }

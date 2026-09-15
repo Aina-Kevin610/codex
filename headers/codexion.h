@@ -59,6 +59,7 @@ typedef struct s_all
 {
 	t_args			*arguments;
 	t_coder			*coder;
+	t_dongle		*dongle;
 	int				stop;
 	long long		start_time;
 	pthread_mutex_t	lock;

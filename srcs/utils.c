@@ -29,19 +29,23 @@ void	init_all(t_all *all)
 	all->stop = 0;
 }
 
-void	print_coders(t_coder *coder, int coder_count)
+void	print_coders(t_all *all)
 {
 	int	i;
 
-	if (!coder || coder_count <= 0)
+	if (!all || !all->coder || !all->arguments
+		|| all->arguments->coders <= 0)
 	{
 		printf("No coder found");
 		return ;
 	}
 	i = 0;
-	while (i < coder_count)
+	while (i < all->arguments->coders)
 	{
-		printf("coder_id: %d\n", coder[i].id);
+		printf("coder_id: %d | dongle_left_id: %d | dongle_right_id: %d\n",
+			all->coder[i].id,
+			all->coder[i].dongle_left ? all->coder[i].dongle_left->id : 0,
+			all->coder[i].dongle_right ? all->coder[i].dongle_right->id : 0);
 		i++;
 	}
 }
