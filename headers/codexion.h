@@ -1,4 +1,4 @@
-# ifndef CODEXION_H
+#ifndef CODEXION_H
 # define CODEXION_H
 
 # include <unistd.h>
@@ -7,7 +7,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
-#include "parsing.h"
+# include "parsing.h"
 
 typedef struct s_coder		t_coder;
 typedef struct s_request	t_request;
@@ -18,6 +18,13 @@ typedef struct t_scheduler
 	int			fifo;
 	int			edf;
 }	t_scheduler;
+
+typedef struct dongle
+{
+	int				id;
+	pthread_mutex_t	lock;
+	pthread_cond_t	cond;
+}	t_dongle;
 
 typedef struct s_args
 {
@@ -31,6 +38,24 @@ typedef struct s_args
 	int				error;
 	t_scheduler		scheduler;
 }	t_args;
+
+typedef struct s_coder
+{
+	int				id;
+	int				is_burnout;
+	int				compile_done;
+	int				step;
+	int				have_compiled;
+	int				have_debug;
+	int				have_refact;
+	int				dongle_hold;
+	pthread_t		thread;
+	t_dongle		*dongle;
+	t_coder			*next;
+	t_coder			*prev;
+	long long		last_compile_start;
+	t_all			*all;
+}	t_coder;
 
 typedef struct s_all
 {
