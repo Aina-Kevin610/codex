@@ -1,5 +1,13 @@
 #include "../headers/codexion.h"
 
+long long	get_actual_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((long long)time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
 int	is_digit(char c)
 {
 	return (c <= '9' && c >= '0');
@@ -27,6 +35,8 @@ void	init_all(t_all *all)
 	all->start_time = 0;
 	all->coder = NULL;
 	all->stop = 0;
+    pthread_mutex_init(&all->lock, NULL);
+    pthread_cond_init(&all->cond, NULL);
 }
 
 void	print_coders(t_all *all)

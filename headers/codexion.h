@@ -10,7 +10,8 @@
 
 # include "parsing.h"
 # include "utils.h"
-#include "coder.h"
+# include "coder.h"
+# include "action.h"
 
 typedef struct s_coder		t_coder;
 typedef struct s_request	t_request;

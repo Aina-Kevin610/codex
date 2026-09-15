@@ -11,6 +11,6 @@ int	main(int argc, char *argv[])
 	}
 	init_dongle(&all);
 	init_coder(&all);
-	print_coders(&all);
+	start_simulation(&all);
 	return (0);
 }
