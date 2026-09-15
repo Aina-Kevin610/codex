@@ -7,7 +7,9 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
+
 # include "parsing.h"
+# include "utils.h"
 
 typedef struct s_coder		t_coder;
 typedef struct s_request	t_request;
