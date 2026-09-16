@@ -1,11 +1,11 @@
 #include "../headers/codexion.h"
 
-void heap_push(t_request data, t_request *heap, t_dongle *dongle)
+void heap_push(t_request data, t_request **heap, t_dongle *dongle)
 {
     if (dongle->heap_size <= 2 && dongle->heap_size > 0)
     {
-        heap[1] = heap[0];
-        heap[0] = data;
+        *heap[1] = *heap[0];
+        *heap[0] = data;
     }
 }
 
@@ -31,7 +31,7 @@ int request(t_coder *coder, t_dongle *dongle)
     if (!request)
         return (0);
     request->id_coder = coder->id;
-    heap_push(*request, dongle->request[0], dongle);
+    heap_push(*request, dongle->request, dongle);
     pthread_mutex_unlock(&dongle->lock);
     return (1);
 }
