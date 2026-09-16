@@ -1,5 +1,21 @@
 #include "../headers/codexion.h"
 
+static void	burnout_log(t_coder *coder, int step)
+{
+	if (step == 4)
+	{
+		fprintf(stdout, "%lld %d has taken a dongle\n",
+			timestamp(coder->all->start_time), coder->id);
+		fprintf(stdout, "%lld %d has taken a dongle\n",
+			timestamp(coder->all->start_time), coder->id);
+	}
+	else if (step == 5)
+	{
+		fprintf(stdout, "%lld %d burned out\n",
+			timestamp(coder->all->start_time), coder->id);
+	}
+}
+
 void	print_log(t_coder *coder, int step)
 {
 	pthread_mutex_lock(&(coder->all->lock));
@@ -19,17 +35,7 @@ void	print_log(t_coder *coder, int step)
 			timestamp(coder->all->start_time), coder->id);
 	}
 	else if (step == 4)
-	{
-		fprintf(stdout, "%lld %d has taken a dongle\n",
-			timestamp(coder->all->start_time), coder->id);
-	}
-	else if (step == 5)
-	{
-		fprintf(stdout, "%lld %d burned out\n",
-			timestamp(coder->all->start_time), coder->id);
-	}
-	else
-		printf("none\n");
+		burnout_log(coder, step);
 	pthread_mutex_unlock(&(coder->all->lock));
 }
 

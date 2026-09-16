@@ -37,7 +37,6 @@ void	take_dongle(t_coder *coder)
 	coder->dongle_left->used_by = coder->id;
 	coder->dongle_right->used_by = coder->id;
 	heap_pop(coder->dongle_left, coder->dongle_left->request);
-	print_log(coder, 4);
 	heap_pop(coder->dongle_right, coder->dongle_right->request);
 	print_log(coder, 4);
 	pthread_mutex_unlock(&coder->all->gle_lock);

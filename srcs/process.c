@@ -9,7 +9,6 @@ int	act(t_coder *coder)
 	request(coder, coder->dongle_left);
 	request(coder, coder->dongle_right);
 	take_dongle(coder);
-	// print_requests(coder);
     signal *= compile(coder);
 	release_dongle(coder);
     signal *= debug(coder);
