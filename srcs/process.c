@@ -9,10 +9,9 @@ int	act(t_coder *coder)
 	// request
 	request(coder, coder->dongle_left);
 	request(coder, coder->dongle_right);
-	// wait for dongle
-	// take dongle
+	take_dongle(coder);
+	print_requests(coder);
     signal *= compile(coder);
-	// put down dongle
     signal *= debug(coder);
     signal *= refactor(coder);
     return (signal);

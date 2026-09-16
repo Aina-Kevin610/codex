@@ -13,6 +13,7 @@
 # include "coder.h"
 # include "action.h"
 # include "request.h"
+# include "dongle.h"
 
 typedef struct s_coder		t_coder;
 typedef struct s_request	t_request;
@@ -27,6 +28,7 @@ typedef struct t_scheduler
 typedef struct s_dongle
 {
 	int				id;
+	int				used_by;
 	int				heap_size;
 	t_request		*request[2];
 	pthread_mutex_t	lock;

@@ -1,12 +1,17 @@
 #include "../headers/codexion.h"
 
-void heap_push(t_request data, t_request **heap, t_dongle *dongle)
+void	heap_push(t_request data, t_request **heap, t_dongle *dongle)
 {
-    if (dongle->heap_size <= 2 && dongle->heap_size > 0)
-    {
-        *heap[1] = *heap[0];
-        *heap[0] = data;
-    }
+    t_request	*new_request;
+
+    if (!heap || !dongle || dongle->heap_size >= 2)
+        return ;
+    new_request = malloc(sizeof(t_request));
+    if (!new_request)
+        return ;
+    *new_request = data;
+    heap[dongle->heap_size] = new_request;
+    dongle->heap_size++;
 }
 
 t_request   *heap_pop(t_dongle *dongle, t_request *heap)
@@ -22,16 +27,15 @@ t_request   *heap_pop(t_dongle *dongle, t_request *heap)
     return (tmp);
 }
 
-int request(t_coder *coder, t_dongle *dongle)
+int	request(t_coder *coder, t_dongle *dongle)
 {
-    t_request *request;
+	t_request	new_request;
 
-    pthread_mutex_lock(&dongle->lock);
-    request = (t_request *) malloc(sizeof(t_request));
-    if (!request)
-        return (0);
-    request->id_coder = coder->id;
-    heap_push(*request, dongle->request, dongle);
-    pthread_mutex_unlock(&dongle->lock);
-    return (1);
+	if (!coder || !dongle)
+		return (0);
+	pthread_mutex_lock(&dongle->lock);
+	new_request.id_coder = coder->id;
+	heap_push(new_request, dongle->request, dongle);
+	pthread_mutex_unlock(&dongle->lock);
+	return (1);
 }

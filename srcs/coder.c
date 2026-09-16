@@ -39,6 +39,9 @@ int	init_dongle(t_all *all)
     {
         dongle[i].id = i + 1;
 		dongle[i].heap_size = 0;
+		dongle[i].used_by = 0;
+		dongle[i].request[0] = NULL;
+		dongle[i].request[1] = NULL;
         pthread_mutex_init(&dongle[i].lock, NULL);
         pthread_cond_init(&dongle[i].cond, NULL);
         i++;

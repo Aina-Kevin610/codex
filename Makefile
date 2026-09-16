@@ -9,7 +9,8 @@ SRCS = srcs/codexion.c \
 	srcs/utils.c \
 	srcs/action.c \
 	srcs/process.c \
-	srcs/request.c
+	srcs/request.c \
+	srcs/dongle.c
 
 OBJS = srcs/codexion.o \
 	srcs/parsing.o \
@@ -17,7 +18,8 @@ OBJS = srcs/codexion.o \
 	srcs/utils.o \
 	srcs/action.o \
 	srcs/process.o \
-	srcs/request.o
+	srcs/request.o \
+	srcs/dongle.o
 
 all: $(NAME)
 
@@ -33,7 +35,7 @@ srcs/parsing.o: srcs/parsing.c headers/codexion.h headers/parsing.h headers/util
 srcs/coder.o: srcs/coder.c headers/codexion.h headers/parsing.h headers/utils.h headers/coder.h headers/action.h
 	$(CC) $(CFLAGS) -c srcs/coder.c -o srcs/coder.o
 
-srcs/utils.o: srcs/utils.c headers/codexion.h headers/parsing.h headers/utils.h headers/coder.h headers/action.h
+srcs/utils.o: srcs/utils.c headers/codexion.h headers/parsing.h headers/utils.h headers/coder.h headers/action.h headers/request.h
 	$(CC) $(CFLAGS) -c srcs/utils.c -o srcs/utils.o
 
 srcs/action.o: srcs/action.c headers/codexion.h headers/parsing.h headers/utils.h headers/coder.h headers/action.h

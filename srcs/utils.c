@@ -59,3 +59,40 @@ void	print_coders(t_all *all)
 		i++;
 	}
 }
+
+
+static void	print_request_id(t_request *request)
+{
+	if (request)
+		printf("%d", request->id_coder);
+	else
+		printf("-");
+}
+
+void	print_requests(t_coder *coder)
+{
+	if (!coder)
+	{
+		printf("coder: empty\n");
+		return ;
+	}
+	printf("[");
+	if (coder->dongle_left)
+	{
+		print_request_id(coder->dongle_left->request[0]);
+		printf(", ");
+		print_request_id(coder->dongle_left->request[1]);
+	}
+	else
+		printf("-, -");
+	printf("] [");
+	if (coder->dongle_right)
+	{
+		print_request_id(coder->dongle_right->request[0]);
+		printf(", ");
+		print_request_id(coder->dongle_right->request[1]);
+	}
+	else
+		printf("-, -");
+	printf("]\n");
+}
