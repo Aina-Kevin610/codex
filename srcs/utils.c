@@ -76,7 +76,7 @@ void	print_requests(t_coder *coder)
 		printf("coder: empty\n");
 		return ;
 	}
-	printf("[");
+	printf("(%d)[", coder->dongle_left->id);
 	if (coder->dongle_left)
 	{
 		print_request_id(coder->dongle_left->request[0]);
@@ -85,7 +85,7 @@ void	print_requests(t_coder *coder)
 	}
 	else
 		printf("-, -");
-	printf("] [");
+	printf("] (%d)[", coder->dongle_right->id);
 	if (coder->dongle_right)
 	{
 		print_request_id(coder->dongle_right->request[0]);

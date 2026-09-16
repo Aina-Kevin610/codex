@@ -15,16 +15,29 @@ void    take_dongle(t_coder *coder)
         !(am_i_priority(coder, coder->dongle_left) && am_i_priority(coder, coder->dongle_left))
     )
         pthread_cond_wait(&coder->dongle_left->cond, &coder->dongle_left->lock);
+    coder->dongle_left->used_by = coder->id;
+    print_log(coder, 4);
+	print_requests(coder);
     pthread_mutex_unlock(&coder->dongle_left->lock);
     pthread_mutex_lock(&coder->dongle_right->lock);
     while (
         !(am_i_priority(coder, coder->dongle_right) && am_i_priority(coder, coder->dongle_right))
     )
         pthread_cond_wait(&coder->dongle_right->cond, &coder->dongle_right->lock);
+    coder->dongle_right->used_by = coder->id;
+    print_log(coder, 4);
+	print_requests(coder);
     pthread_mutex_unlock(&coder->dongle_right->lock);
 }
 
-// void    release_dongle(t_coder *coder)
-// {
-
-// }
+void    release_dongle(t_coder *coder)
+{
+    pthread_mutex_lock(&coder->dongle_left->lock);
+    pthread_cond_broadcast(&coder->dongle_left->cond);
+    coder->dongle_left->used_by = 0;
+    pthread_mutex_unlock(&coder->dongle_left->lock);
+    pthread_mutex_lock(&coder->dongle_right->lock);
+    pthread_cond_broadcast(&coder->dongle_right->cond);
+    coder->dongle_right->used_by = 0;
+    pthread_mutex_unlock(&coder->dongle_right->lock);
+}

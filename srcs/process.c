@@ -6,12 +6,12 @@ int	act(t_coder *coder)
 
 	signal = 1;
 	coder->step = 1;
-	// request
 	request(coder, coder->dongle_left);
 	request(coder, coder->dongle_right);
 	take_dongle(coder);
-	print_requests(coder);
+	// print_requests(coder);
     signal *= compile(coder);
+	release_dongle(coder);
     signal *= debug(coder);
     signal *= refactor(coder);
     return (signal);
