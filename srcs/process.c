@@ -4,8 +4,15 @@ int	act(t_coder *coder)
 {
 	int	signal;
 
-	signal = 0;
+	signal = 1;
+	coder->step = 1;
+	// request
+	request(coder, coder->dongle_left);
+	request(coder, coder->dongle_right);
+	// wait for dongle
+	// take dongle
     signal *= compile(coder);
+	// put down dongle
     signal *= debug(coder);
     signal *= refactor(coder);
     return (signal);

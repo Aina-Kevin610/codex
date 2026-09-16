@@ -9,8 +9,5 @@ int     init_dongle(t_all *all);
 int	    act(t_coder *coder);
 void	*process(void *coders);
 void	start_simulation(t_all *all);
-void	request(t_coder *coder);
-void	take_dongle(t_coder *coder);
-void	release_dongle(t_coder *coder);
 
 #endif

@@ -8,14 +8,16 @@ SRCS = srcs/codexion.c \
 	srcs/coder.c \
 	srcs/utils.c \
 	srcs/action.c \
-	srcs/process.c
+	srcs/process.c \
+	srcs/request.c
 
 OBJS = srcs/codexion.o \
 	srcs/parsing.o \
 	srcs/coder.o \
 	srcs/utils.o \
 	srcs/action.o \
-	srcs/process.o
+	srcs/process.o \
+	srcs/request.o
 
 all: $(NAME)
 

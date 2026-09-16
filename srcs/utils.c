@@ -32,7 +32,7 @@ void	init_all(t_all *all)
 		return ;
 	}
 	all->arguments = arguments;
-	all->start_time = 0;
+	all->start_time = get_actual_time();
 	all->coder = NULL;
 	all->stop = 0;
     pthread_mutex_init(&all->lock, NULL);

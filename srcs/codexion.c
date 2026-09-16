@@ -3,6 +3,7 @@
 int	main(int argc, char *argv[])
 {
 	t_all	all;
+
 	init_all(&all);
 	if (arg_check(argc, argv, &all))
 	{

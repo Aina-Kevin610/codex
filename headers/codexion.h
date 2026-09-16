@@ -12,6 +12,7 @@
 # include "utils.h"
 # include "coder.h"
 # include "action.h"
+# include "request.h"
 
 typedef struct s_coder		t_coder;
 typedef struct s_request	t_request;
@@ -23,9 +24,11 @@ typedef struct t_scheduler
 	int			edf;
 }	t_scheduler;
 
-typedef struct dongle
+typedef struct s_dongle
 {
 	int				id;
+	int				heap_size;
+	t_request		*request[2];
 	pthread_mutex_t	lock;
 	pthread_cond_t	cond;
 }	t_dongle;
@@ -55,6 +58,11 @@ typedef struct s_coder
 	long long		last_compile_start;
 	pthread_t		thread;
 }	t_coder;
+
+typedef struct s_request
+{
+	int			id_coder;
+}	t_request;
 
 typedef struct s_all
 {

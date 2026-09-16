@@ -38,6 +38,7 @@ int	init_dongle(t_all *all)
     while (i < all->arguments->coders)
     {
         dongle[i].id = i + 1;
+		dongle[i].heap_size = 0;
         pthread_mutex_init(&dongle[i].lock, NULL);
         pthread_cond_init(&dongle[i].cond, NULL);
         i++;
