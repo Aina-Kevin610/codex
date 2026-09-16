@@ -6,22 +6,27 @@ void	print_log(t_coder *coder, int step)
 	if (step == 1)
 	{
 		fprintf(stdout, "%lld %d is compiling \n",
-			get_actual_time() - coder->all->start_time, coder->id);
+			timestamp(coder->all->start_time), coder->id);
 	}
 	else if (step == 2)
 	{
 		fprintf(stdout, "%lld %d is debugging\n",
-			get_actual_time() - coder->all->start_time, coder->id);
+			timestamp(coder->all->start_time), coder->id);
 	}
 	else if (step == 3)
 	{
 		fprintf(stdout, "%lld %d is refactoring\n",
-			get_actual_time() - coder->all->start_time, coder->id);
+			timestamp(coder->all->start_time), coder->id);
 	}
 	else if (step == 4)
 	{
 		fprintf(stdout, "%lld %d has taken a dongle\n",
-			get_actual_time() - coder->all->start_time, coder->id);
+			timestamp(coder->all->start_time), coder->id);
+	}
+	else if (step == 5)
+	{
+		fprintf(stdout, "%lld %d burned out\n",
+			timestamp(coder->all->start_time), coder->id);
 	}
 	else
 		printf("none\n");

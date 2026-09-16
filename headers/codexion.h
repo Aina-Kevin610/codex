@@ -29,6 +29,7 @@ typedef struct s_dongle
 {
 	int				id;
 	int				used_by;
+	long long		free_at;
 	int				heap_size;
 	t_request		*request[2];
 }	t_dongle;
@@ -76,5 +77,8 @@ typedef struct s_all
 	pthread_mutex_t	lock;
 	pthread_cond_t	cond;
 }	t_all;
+
+long long	timestamp(long long start);
+long long	get_actual_time(void);
 
 # endif

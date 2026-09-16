@@ -1,5 +1,4 @@
 #include "../headers/codexion.h"
-#include <pthread.h>
 
 static int  am_i_priority(t_coder *coder, t_dongle *dongle)
 {

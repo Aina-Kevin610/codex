@@ -40,6 +40,7 @@ int	init_dongle(t_all *all)
         dongle[i].id = i + 1;
 		dongle[i].heap_size = 0;
 		dongle[i].used_by = 0;
+		dongle[i].free_at = timestamp(all->start_time);
 		dongle[i].request[0] = NULL;
 		dongle[i].request[1] = NULL;
         i++;
