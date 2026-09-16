@@ -37,6 +37,8 @@ void	init_all(t_all *all)
 	all->stop = 0;
     pthread_mutex_init(&all->lock, NULL);
     pthread_cond_init(&all->cond, NULL);
+	pthread_mutex_init(&all->gle_lock, NULL);
+    pthread_cond_init(&all->gle_cond, NULL);
 }
 
 void	print_coders(t_all *all)

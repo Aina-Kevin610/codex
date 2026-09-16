@@ -31,8 +31,6 @@ typedef struct s_dongle
 	int				used_by;
 	int				heap_size;
 	t_request		*request[2];
-	pthread_mutex_t	lock;
-	pthread_cond_t	cond;
 }	t_dongle;
 
 typedef struct s_args
@@ -73,6 +71,8 @@ typedef struct s_all
 	t_dongle		*dongle;
 	int				stop;
 	long long		start_time;
+	pthread_mutex_t	gle_lock;
+	pthread_cond_t	gle_cond;
 	pthread_mutex_t	lock;
 	pthread_cond_t	cond;
 }	t_all;
