@@ -35,6 +35,8 @@ int	request(t_coder *coder, t_dongle *dongle)
 		return (0);
 	pthread_mutex_lock(&coder->all->gle_lock);
 	new_request.id_coder = coder->id;
+	new_request.created_at = get_actual_time();
+    new_request.deadline = coder->last_compile_start + coder->all->arguments->burnout;
 	heap_push(new_request, dongle->request, dongle);
     if (dongle->heap_size == 2)
     {

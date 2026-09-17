@@ -21,7 +21,7 @@ void	print_log(t_coder *coder, int step)
 	pthread_mutex_lock(&(coder->all->lock));
 	if (step == 1)
 	{
-		fprintf(stdout, "%lld %d is compiling \n",
+		fprintf(stdout, "%lld %d is compiling\n",
 			timestamp(coder->all->start_time), coder->id);
 	}
 	else if (step == 2)
