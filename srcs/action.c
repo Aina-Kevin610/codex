@@ -58,7 +58,7 @@ int	debug(t_coder *coder)
 {
 	if (coder->step == 2)
 	{
-		usleep(coder->all->arguments->compile * 1000);
+		usleep(coder->all->arguments->debug * 1000);
 		print_log(coder, coder->step);
 		coder->step = 3;
 		return (1);
@@ -70,7 +70,7 @@ int	refactor(t_coder *coder)
 {
 	if (coder->step == 3)
 	{
-		usleep(coder->all->arguments->compile * 1000);
+		usleep(coder->all->arguments->refactor * 1000);
 		print_log(coder, coder->step);
 		coder->step = 1;
 		return (1);

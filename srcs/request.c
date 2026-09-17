@@ -36,7 +36,10 @@ int	request(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_lock(&coder->all->gle_lock);
 	new_request.id_coder = coder->id;
 	heap_push(new_request, dongle->request, dongle);
-    heapify(&coder->all->arguments->scheduler, dongle);
+    if (dongle->heap_size == 2)
+    {
+        heapify(&coder->all->arguments->scheduler, dongle);
+    }
 	pthread_mutex_unlock(&coder->all->gle_lock);
 	return (1);
 }
