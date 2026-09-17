@@ -45,10 +45,14 @@ void	take_dongle(t_coder *coder)
 void	release_dongle(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->all->gle_lock);
+	pthread_mutex_lock(&coder->dongle_left->dongle_lock);
+	pthread_mutex_lock(&coder->dongle_right->dongle_lock);
 	coder->dongle_left->used_by = 0;
 	coder->dongle_right->used_by = 0;
     coder->dongle_left->free_at  = get_actual_time() + coder->all->arguments->dongle_cooldown;
     coder->dongle_right->free_at = get_actual_time() + coder->all->arguments->dongle_cooldown;
+	pthread_mutex_unlock(&coder->dongle_right->dongle_lock);
+	pthread_mutex_unlock(&coder->dongle_left->dongle_lock);
 	pthread_cond_broadcast(&coder->all->gle_cond);
 	pthread_mutex_unlock(&coder->all->gle_lock);
 }

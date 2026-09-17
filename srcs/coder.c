@@ -43,6 +43,7 @@ int	init_dongle(t_all *all)
 		dongle[i].free_at = timestamp(all->start_time);
 		dongle[i].request[0] = NULL;
 		dongle[i].request[1] = NULL;
+		pthread_mutex_init(&dongle[i].dongle_lock, NULL);
         i++;
     }
     return (1);
