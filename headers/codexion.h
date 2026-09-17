@@ -19,7 +19,7 @@ typedef struct s_coder		t_coder;
 typedef struct s_request	t_request;
 typedef struct s_all		t_all;
 
-typedef struct t_scheduler
+typedef struct s_scheduler
 {
 	int			fifo;
 	int			edf;
@@ -63,6 +63,8 @@ typedef struct s_coder
 typedef struct s_request
 {
 	int			id_coder;
+	long long	created_at;
+	long long	deadline;
 }	t_request;
 
 typedef struct s_all

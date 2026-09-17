@@ -36,6 +36,41 @@ int	request(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_lock(&coder->all->gle_lock);
 	new_request.id_coder = coder->id;
 	heap_push(new_request, dongle->request, dongle);
+    heapify(&coder->all->arguments->scheduler, dongle);
 	pthread_mutex_unlock(&coder->all->gle_lock);
 	return (1);
+}
+
+void    heapify(t_scheduler *scheduler, t_dongle *dongle)
+{
+    if (scheduler->fifo == 1)
+        fifo_sort(*dongle->request);
+    else if (scheduler->edf == 1)
+        edf_sort(*dongle->request);
+    else
+        fprintf(stderr, "WARNING - invalide scheduler!");
+}
+
+void    fifo_sort(t_request *request)
+{
+    t_request   tmp;
+
+    if (request[0].created_at < request[1].created_at)
+    {
+        tmp = request[0];
+        request[0] = request[1];
+        request[1] = tmp;
+    }
+}
+
+void    edf_sort(t_request *request)
+{
+    t_request   tmp;
+
+    if (request[0].deadline > request[1].deadline)
+    {
+        tmp = request[0];
+        request[0] = request[1];
+        request[1] = tmp;
+    }
 }
