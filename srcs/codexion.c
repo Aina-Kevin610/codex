@@ -1,30 +1,29 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   codexion.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/17 15:00:28 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/24 12:50:40 by airandri         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../headers/codexion.h"
 
 int	main(int argc, char *argv[])
 {
 	t_all	all;
 
-	init_all(&all);
+	if (!init_all(&all))
+		return (ft_error("allocation or synchronization initialization failed"));
 	if (arg_check(argc, argv, &all))
 	{
-		ft_error("ERROR - Invalid arguments!");
+		ft_error("invalid arguments");
+		free_simulation(&all);
 		return (1);
 	}
-	init_dongle(&all);
-	init_coder(&all);
+	if (!init_dongle(&all) || !init_coder(&all))
+	{
+		ft_error("allocation error");
+		free_simulation(&all);
+		return (1);
+	}
 	if (start_simulation(&all))
-		printf("Error - problem on simulation");
+	{
+		ft_error("problem on simulation");
+		free_simulation(&all);
+		return (1);
+	}
+	free_simulation(&all);
 	return (0);
 }

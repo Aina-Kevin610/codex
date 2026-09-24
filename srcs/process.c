@@ -1,58 +1,69 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   process.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/17 14:32:40 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/24 16:00:34 by airandri         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../headers/codexion.h"
- 
-int	act(t_coder *coder)
-{
-	int	signal;
 
-	signal = 1;
-	coder->step = 1;
-	pthread_mutex_lock(&coder->dongle_left->dongle_lock);
-	request(coder, coder->dongle_left);
-	pthread_mutex_unlock(&coder->dongle_left->dongle_lock);
-	pthread_mutex_lock(&coder->dongle_right->dongle_lock);
-	request(coder, coder->dongle_right);
-	pthread_mutex_unlock(&coder->dongle_right->dongle_lock);
-	take_dongle(coder);
-	signal *= compile(coder);
-	release_dongle(coder);
-	signal *= debug(coder);
-	signal *= refactor(coder);
+static int	all_finished(t_coder *coder)
+{
+	int	finished;
+
+	finished = 0;
+	pthread_mutex_lock(&coder->all->gle_lock);
 	if (coder->compile_done >= coder->all->arguments->nb_compiles)
-		coder->all->stop *= 0;
-	return (signal);
+	{
+		finished = 1;
+		coder->finished = 1;
+		coder->all->finished_coders++;
+		if (coder->all->finished_coders == coder->all->arguments->coders)
+		{
+			coder->all->stop = 1;
+			pthread_cond_broadcast(&coder->all->gle_cond);
+		}
+	}
+	pthread_mutex_unlock(&coder->all->gle_lock);
+	return (finished);
+}
+
+static int	add_requests(t_coder *coder)
+{
+	int	ok;
+
+	ok = 1;
+	pthread_mutex_lock(&coder->all->gle_lock);
+	if (coder->all->stop)
+		ok = 0;
+	else if (!request(coder, coder->dongle_left))
+		ok = 0;
+	else if (coder->dongle_right != coder->dongle_left
+		&& !request(coder, coder->dongle_right))
+		ok = 0;
+	pthread_mutex_unlock(&coder->all->gle_lock);
+	return (ok);
 }
 
 void	*process(void *coders)
 {
-	int		check;
 	t_coder	*coder;
 
-	if (!coders)
-	{
-		fprintf(stderr, "ERROR - Processing failed");
-		return (NULL);
-	}
 	coder = (t_coder *)coders;
-	check = 1;
-	while (check)
+	if (!coder)
+		return (NULL);
+	while (1)
 	{
-		coder->all->stop = 1;
-		coder->all->is_burnout = 1;
-		check = act(coder);
+		pthread_mutex_lock(&coder->all->gle_lock);
 		if (coder->all->stop)
-			pthread_cond_signal(&coder->all->m_cond);
+		{
+			pthread_mutex_unlock(&coder->all->gle_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&coder->all->gle_lock);
+		if (!add_requests(coder))
+			break ;
+		if (!take_dongle(coder))
+			break ;
+		compile(coder);
+		release_dongle(coder);
+		if (all_finished(coder))
+			break ;
+		if (!debug(coder) || !refactor(coder))
+			break ;
 	}
 	return (NULL);
 }
@@ -60,22 +71,36 @@ void	*process(void *coders)
 int	start_simulation(t_all *all)
 {
 	int	i;
+	int	created;
 
-	if (!all || !all->coder || !all->arguments
-		|| all->arguments->coders <= 0)
+	if (!all || !all->coder || !all->arguments)
 		return (1);
-	i = 0;
-	while (i < all->arguments->coders)
+	if (pthread_create(&all->monitor, NULL, monitor, all) != 0)
+		return (1);
+	created = 0;
+	while (created < all->arguments->coders)
 	{
-		pthread_create(&all->coder[i].thread, NULL, process,
-			(void *)&all->coder[i]);
-		i++;
+		if (pthread_create(&all->coder[created].thread, NULL, process,
+			&all->coder[created]) != 0)
+		{
+			pthread_mutex_lock(&all->gle_lock);
+			all->stop = 1;
+			pthread_cond_broadcast(&all->gle_cond);
+			pthread_mutex_unlock(&all->gle_lock);
+			break ;
+		}
+		created++;
 	}
 	i = 0;
-	while (i < all->arguments->coders)
+	while (i < created)
 	{
 		pthread_join(all->coder[i].thread, NULL);
 		i++;
 	}
+	pthread_mutex_lock(&all->gle_lock);
+	all->stop = 1;
+	pthread_cond_broadcast(&all->gle_cond);
+	pthread_mutex_unlock(&all->gle_lock);
+	pthread_join(all->monitor, NULL);
 	return (0);
 }

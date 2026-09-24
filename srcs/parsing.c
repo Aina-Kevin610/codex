@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/17 15:00:50 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 15:00:51 by airandri         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../headers/codexion.h"
 
 int	arg_check(int argc, char *argv[], t_all *all)
@@ -17,25 +5,28 @@ int	arg_check(int argc, char *argv[], t_all *all)
 	if (argc != 9)
 		return (1);
 	*(all->arguments) = parsing(argv, all->arguments);
-	if (all->arguments->error)
-		return (1);
-	return (0);
+	return (all->arguments->error);
 }
 
 int	number_check(char *number)
 {
-	int	i;
+	long long	value;
+	int		i;
 
+	if (!number || !number[0])
+		return (0);
+	value = 0;
 	i = 0;
 	while (number[i])
 	{
 		if (!is_digit(number[i]))
 			return (0);
+		value = value * 10 + (number[i] - '0');
+		if (value > 2147483647)
+			return (0);
 		i++;
 	}
-	if (atoi(number) <= 0 || 2147483647 < atoi(number))
-		return (0);
-	return (1);
+	return (value > 0);
 }
 
 void	assign_arg(char **init, t_args *arg)
@@ -47,16 +38,8 @@ void	assign_arg(char **init, t_args *arg)
 	arg->refactor = atoi(init[5]);
 	arg->nb_compiles = atoi(init[6]);
 	arg->dongle_cooldown = atoi(init[7]);
-	if (!strcmp(init[8], "fifo"))
-	{
-		arg->scheduler.fifo = 1;
-		arg->scheduler.edf = 0;
-	}
-	else if (!strcmp(init[8], "edf"))
-	{
-		arg->scheduler.fifo = 0;
-		arg->scheduler.edf = 1;
-	}
+	arg->scheduler.fifo = !strcmp(init[8], "fifo");
+	arg->scheduler.edf = !strcmp(init[8], "edf");
 }
 
 t_args	parsing(char **argv, t_args *arg)
@@ -82,7 +65,5 @@ int	check_arg(char **arg)
 			return (0);
 		i++;
 	}
-	if (strcmp(arg[8], "fifo") && strcmp(arg[8], "edf"))
-		return (0);
-	return (1);
+	return (!strcmp(arg[8], "fifo") || !strcmp(arg[8], "edf"));
 }

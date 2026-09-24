@@ -1,26 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/17 14:34:25 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 14:34:26 by airandri         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef UTILS_H 
+#ifndef UTILS_H
 # define UTILS_H
 
-typedef struct s_all	t_all;
-typedef struct s_coder	t_coder;
+typedef struct s_all t_all;
+typedef struct s_coder t_coder;
 
-int	    	is_digit(char c);
-void	    init_all(t_all *all);
-int	    	ft_error(char *message);
-void	    print_coders(t_all *all);
-void	    print_requests(t_coder *coder);
-long long	get_actual_time(void);
+int			is_digit(char c);
+int			init_all(t_all *all);
+int			ft_error(char *message);
+void			print_coders(t_all *all);
+void			print_requests(t_coder *coder);
+void			free_requests(t_all *all);
 
 #endif
