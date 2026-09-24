@@ -6,13 +6,11 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 15:02:19 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 15:02:20 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/17 15:16:27 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/codexion.h"
-
-
 
 int	is_digit(char c)
 {
@@ -41,10 +39,10 @@ void	init_all(t_all *all)
 	all->start_time = get_actual_time();
 	all->coder = NULL;
 	all->stop = 0;
-    pthread_mutex_init(&all->lock, NULL);
-    pthread_cond_init(&all->cond, NULL);
+	pthread_mutex_init(&all->lock, NULL);
+	pthread_cond_init(&all->cond, NULL);
 	pthread_mutex_init(&all->gle_lock, NULL);
-    pthread_cond_init(&all->gle_cond, NULL);
+	pthread_cond_init(&all->gle_cond, NULL);
 }
 
 void	print_coders(t_all *all)

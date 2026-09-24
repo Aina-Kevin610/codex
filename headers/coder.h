@@ -6,12 +6,12 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 14:32:44 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 14:32:45 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/17 15:08:35 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODER_H
-#define CODER_H
+# define CODER_H
 
 typedef struct s_all	t_all;
 typedef struct s_coder	t_coder;

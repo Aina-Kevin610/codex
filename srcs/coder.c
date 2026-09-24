@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 14:34:35 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 14:34:36 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/17 15:13:14 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,21 @@ int	init_dongle(t_all *all)
 	int		    i;
 	t_dongle	*dongle;
 
-    dongle = (t_dongle *) malloc(sizeof(t_dongle) * all->arguments->coders);
-    if (!dongle)
-        return (0);
-    all->dongle = dongle;
-    i = 0;
-    while (i < all->arguments->coders)
-    {
-        dongle[i].id = i + 1;
+	dongle = (t_dongle *) malloc(sizeof(t_dongle) * all->arguments->coders);
+	if (!dongle)
+		return (0);
+	all->dongle = dongle;
+	i = 0;
+	while (i < all->arguments->coders)
+	{
+		dongle[i].id = i + 1;
 		dongle[i].heap_size = 0;
 		dongle[i].used_by = 0;
 		dongle[i].free_at = timestamp(all->start_time);
 		dongle[i].request[0] = NULL;
 		dongle[i].request[1] = NULL;
 		pthread_mutex_init(&dongle[i].dongle_lock, NULL);
-        i++;
-    }
-    return (1);
+		i++;
+	}
+	return (1);
 }

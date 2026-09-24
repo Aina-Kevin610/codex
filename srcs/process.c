@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 14:32:40 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 14:32:41 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/17 15:14:01 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ int	act(t_coder *coder)
 	request(coder, coder->dongle_right);
 	pthread_mutex_unlock(&coder->dongle_right->dongle_lock);
 	take_dongle(coder);
-    signal *= compile(coder);
+	signal *= compile(coder);
 	release_dongle(coder);
-    signal *= debug(coder);
-    signal *= refactor(coder);
-    return (signal);
+	signal *= debug(coder);
+	signal *= refactor(coder);
+	return (signal);
 }
 
 void	*process(void *coders)
 {
-	int		check;
+	int	check;
 
 	if (!coders)
 	{
