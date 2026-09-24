@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 15:01:09 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/24 13:04:26 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/24 16:22:34 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void    fifo_sort(t_request *request)
 {
     t_request   tmp;
 
-    if (request[0].created_at < request[1].created_at)
+    if (request[0].created_at > request[1].created_at)
     {
         tmp = request[0];
         request[0] = request[1];
