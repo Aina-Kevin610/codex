@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   codexion.c                                         :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/17 15:00:28 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/24 12:50:40 by airandri         ###   ########.fr       */
+/*   Created: 2026/09/24 14:12:20 by airandri          #+#    #+#             */
+/*   Updated: 2026/09/24 14:48:12 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/codexion.h"
 
-int	main(int argc, char *argv[])
+void    *monitor(void *all_ptr)
 {
-	t_all	all;
+    t_all   *all;
 
-	init_all(&all);
-	if (arg_check(argc, argv, &all))
-	{
-		ft_error("ERROR - Invalid arguments!");
-		return (1);
-	}
-	init_dongle(&all);
-	init_coder(&all);
-	if (start_simulation(&all))
-		printf("Error - problem on simulation");
-	return (0);
+    all = (t_all *)all_ptr;
+    pthread_mutex_lock(&all->m_lock);
+    while(!all->is_burnout || !all->stop)
+        pthread_cond_wait(&all->m_cond, &all->m_lock);
+    printf("burned out");
+    pthread_mutex_unlock(&all->m_lock);
+    return (NULL);
 }

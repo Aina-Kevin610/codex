@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 14:32:40 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 15:14:01 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/24 16:00:34 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,41 @@ int	act(t_coder *coder)
 	release_dongle(coder);
 	signal *= debug(coder);
 	signal *= refactor(coder);
+	if (coder->compile_done >= coder->all->arguments->nb_compiles)
+		coder->all->stop *= 0;
 	return (signal);
 }
 
 void	*process(void *coders)
 {
-	int	check;
+	int		check;
+	t_coder	*coder;
 
 	if (!coders)
 	{
 		fprintf(stderr, "ERROR - Processing failed");
 		return (NULL);
 	}
+	coder = (t_coder *)coders;
 	check = 1;
 	while (check)
-		check = act((t_coder *)coders);
+	{
+		coder->all->stop = 1;
+		coder->all->is_burnout = 1;
+		check = act(coder);
+		if (coder->all->stop)
+			pthread_cond_signal(&coder->all->m_cond);
+	}
 	return (NULL);
 }
 
-void	start_simulation(t_all *all)
+int	start_simulation(t_all *all)
 {
 	int	i;
 
 	if (!all || !all->coder || !all->arguments
 		|| all->arguments->coders <= 0)
-		return ;
+		return (1);
 	i = 0;
 	while (i < all->arguments->coders)
 	{
@@ -67,4 +77,5 @@ void	start_simulation(t_all *all)
 		pthread_join(all->coder[i].thread, NULL);
 		i++;
 	}
+	return (0);
 }

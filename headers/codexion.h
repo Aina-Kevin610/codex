@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 14:32:50 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 14:32:51 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/24 14:19:16 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ typedef struct s_args
 typedef struct s_coder
 {
 	int				id;
-	int				is_burnout;
 	int				compile_done;
 	int				step;
 	t_all			*all;
@@ -82,18 +81,23 @@ typedef struct s_request
 
 typedef struct s_all
 {
+	int				is_burnout;
 	t_args			*arguments;
 	t_coder			*coder;
 	t_dongle		*dongle;
 	int				stop;
 	long long		start_time;
+	pthread_t		monitor;
 	pthread_mutex_t	gle_lock;
 	pthread_cond_t	gle_cond;
+	pthread_mutex_t	m_lock;
+	pthread_cond_t	m_cond;
 	pthread_mutex_t	lock;
 	pthread_cond_t	cond;
 }	t_all;
 
 long long	timestamp(long long start);
 long long	get_actual_time(void);
+void		*monitor(void *all);
 
 # endif

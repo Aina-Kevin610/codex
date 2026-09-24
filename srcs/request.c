@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 15:01:09 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 15:01:10 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/24 13:04:26 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_request	*heap_pop(t_dongle *dongle, t_request **heap)
         return (NULL);
     tmp = heap[0];
     heap[0] = heap[1];
+    free(heap[1]);
     heap[1] = NULL;
     dongle->heap_size--;
     return (tmp);

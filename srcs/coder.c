@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 14:34:35 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 15:13:14 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/24 14:47:17 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	init_coder(t_all *all)
 		coder[i].id = i + 1;
 		coder[i].compile_done = 0;
 		coder[i].all = all;
-		coder[i].is_burnout = 0;
 		coder[i].last_compile_start = 0;
 		coder[i].dongle_left = &all->dongle[i];
 		coder[i].dongle_right = &all->dongle[(i + 1)

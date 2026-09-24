@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/17 14:34:30 by airandri          #+#    #+#             */
-/*   Updated: 2026/09/17 14:34:31 by airandri         ###   ########.fr       */
+/*   Updated: 2026/09/24 14:40:00 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void	print_log(t_coder *coder, int step)
 
 int	compile(t_coder *coder)
 {
-	if (coder->compile_done >= coder->all->arguments->nb_compiles)
-		return (0);
 	if (coder->step == 1)
 	{
 		usleep(coder->all->arguments->compile * 1000);
