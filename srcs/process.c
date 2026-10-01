@@ -71,28 +71,24 @@ void	*process(void *coders)
 int	start_simulation(t_all *all)
 {
 	int	i;
-	int	created;
 
 	if (!all || !all->coder || !all->arguments)
 		return (1);
-	if (pthread_create(&all->monitor, NULL, monitor, all) != 0)
-		return (1);
-	created = 0;
-	while (created < all->arguments->coders)
+	pthread_create(&all->monitor, NULL, monitor, all);
+	i = 0;
+	while (i < all->arguments->coders)
 	{
-		if (pthread_create(&all->coder[created].thread, NULL, process,
-			&all->coder[created]) != 0)
-		{
-			pthread_mutex_lock(&all->gle_lock);
-			all->stop = 1;
-			pthread_cond_broadcast(&all->gle_cond);
-			pthread_mutex_unlock(&all->gle_lock);
-			break ;
-		}
-		created++;
+		pthread_create(&all->coder[i].thread, NULL, process,
+			&all->coder[i]);
+		pthread_mutex_lock(&all->gle_lock);
+		all->stop = 1;
+		pthread_cond_broadcast(&all->gle_cond);
+		pthread_mutex_unlock(&all->gle_lock);
+		break ;
+		i++;
 	}
 	i = 0;
-	while (i < created)
+	while (i < all->arguments->coders)
 	{
 		pthread_join(all->coder[i].thread, NULL);
 		i++;
