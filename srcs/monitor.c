@@ -1,69 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 01:19:57 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 01:37:03 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/codexion.h"
 
-static int	find_deadline(t_all *all, long long *deadline, int *coder_id)
+int	check_burnout(t_coder *coders)
 {
 	int		i;
-	long long	now;
-	long long	current;
+	long	now;
 
-	now = get_actual_time();
-	*deadline = 0;
-	*coder_id = 0;
 	i = 0;
-	while (i < all->arguments->coders)
+	while (i < coders->all->arguments->coders)
 	{
-		if (all->coder[i].finished)
+		now = timestamp(coders[i].all->start_time);
+		if (now - coders[i].last_compile_start > coders->all->arguments->burnout)
 		{
-			i++;
-			continue ;
-		}
-		current = all->coder[i].last_compile_start
-			+ all->arguments->burnout;
-		if (!*deadline || current < *deadline)
-		{
-			*deadline = current;
-			*coder_id = all->coder[i].id;
-		}
-		if (current <= now)
+			pthread_mutex_lock(&coders[i].all->stop_mutex);
+			coders[i].all->is_burnout = 1;
+			pthread_mutex_unlock(&coders[i].all->stop_mutex);
+			pthread_cond_broadcast(&coders->dongle_left->dongle_cond);
+			pthread_cond_broadcast(&coders->dongle_right->dongle_cond);
+			print_log(&coders[i], 5);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
 }
 
-void	*monitor(void *all_ptr)
+void	*monitor(void *arg)
 {
-	t_all		*all;
-	struct timespec	ts;
-	long long	deadline;
-	int			coder_id;
-	int			i;
+	t_coder	*coder;
 
-	all = (t_all *)all_ptr;
-	pthread_mutex_lock(&all->gle_lock);
-	while (!all->stop)
+	coder = (t_coder *)arg;
+	while (1)
 	{
-		if (find_deadline(all, &deadline, &coder_id))
-		{
-			all->is_burnout = 1;
-			all->stop = 1;
-			i = 0;
-			while (i < all->arguments->coders)
-			{
-				if (all->coder[i].id == coder_id)
-				{
-					print_log(&all->coder[i], 5);
-					break ;
-				}
-				i++;
-			}
-			pthread_cond_broadcast(&all->gle_cond);
+		if (check_burnout(coder) || all_finished(coder))
 			break ;
-		}
-		ts.tv_sec = deadline / 1000;
-		ts.tv_nsec = (deadline % 1000) * 1000000;
-		pthread_cond_timedwait(&all->gle_cond, &all->gle_lock, &ts);
+		usleep(1000);
 	}
-	pthread_mutex_unlock(&all->gle_lock);
 	return (NULL);
 }

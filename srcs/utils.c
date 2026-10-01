@@ -12,6 +12,8 @@ int	ft_error(char *message)
 
 int	init_all(t_all *all)
 {
+	all->stop = 0;
+	all->is_burnout = 0;
 	if (!all)
 		return (0);
 	memset(all, 0, sizeof(*all));

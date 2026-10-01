@@ -1,6 +1,6 @@
 #include "../headers/codexion.h"
 
-static int	all_finished(t_coder *coder)
+int	all_finished(t_coder *coder)
 {
 	int	finished;
 
@@ -26,7 +26,8 @@ static int	add_requests(t_coder *coder)
 	int	ok;
 
 	ok = 1;
-	pthread_mutex_lock(&coder->all->gle_lock);
+	pthread_mutex_lock(&coder->dongle_left->dongle_lock);
+	pthread_mutex_lock(&coder->dongle_right->dongle_lock);
 	if (coder->all->stop)
 		ok = 0;
 	else if (!request(coder, coder->dongle_left))
@@ -34,7 +35,8 @@ static int	add_requests(t_coder *coder)
 	else if (coder->dongle_right != coder->dongle_left
 		&& !request(coder, coder->dongle_right))
 		ok = 0;
-	pthread_mutex_unlock(&coder->all->gle_lock);
+	pthread_mutex_unlock(&coder->dongle_left->dongle_lock);
+	pthread_mutex_unlock(&coder->dongle_right->dongle_lock);
 	return (ok);
 }
 
@@ -56,14 +58,13 @@ void	*process(void *coders)
 		pthread_mutex_unlock(&coder->all->gle_lock);
 		if (!add_requests(coder))
 			break ;
-		if (!take_dongle(coder))
-			break ;
+		take_dongle(coder);
 		compile(coder);
 		release_dongle(coder);
-		if (all_finished(coder))
+		if (all_finished(coder) || coder->all->is_burnout)
 			break ;
-		if (!debug(coder) || !refactor(coder))
-			break ;
+		debug(coder);
+		refactor(coder);
 	}
 	return (NULL);
 }
@@ -81,10 +82,8 @@ int	start_simulation(t_all *all)
 		pthread_create(&all->coder[i].thread, NULL, process,
 			&all->coder[i]);
 		pthread_mutex_lock(&all->gle_lock);
-		all->stop = 1;
 		pthread_cond_broadcast(&all->gle_cond);
 		pthread_mutex_unlock(&all->gle_lock);
-		break ;
 		i++;
 	}
 	i = 0;

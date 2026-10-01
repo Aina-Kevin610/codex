@@ -32,6 +32,7 @@ typedef struct s_dongle
 	int				heap_size;
 	long long		free_at;
 	pthread_mutex_t	dongle_lock;
+	pthread_cond_t	dongle_cond;
 	t_request		*request[2];
 } t_dongle;
 
@@ -54,11 +55,11 @@ typedef struct s_coder
 	int			compile_done;
 	int			step;
 	int			finished;
-	t_all			*all;
-	t_dongle		*dongle_left;
-	t_dongle		*dongle_right;
-	long long		last_compile_start;
-	pthread_t		thread;
+	t_all		*all;
+	t_dongle	*dongle_left;
+	t_dongle	*dongle_right;
+	long long	last_compile_start;
+	pthread_t	thread;
 } t_coder;
 
 typedef struct s_request
@@ -73,18 +74,20 @@ typedef struct s_all
 	int				is_burnout;
 	int				stop;
 	int				finished_coders;
-	t_args				*arguments;
+	t_args			*arguments;
 	t_coder			*coder;
 	t_dongle		*dongle;
 	long long		start_time;
 	pthread_t		monitor;
 	pthread_mutex_t	gle_lock;
 	pthread_cond_t	gle_cond;
+	pthread_mutex_t	stop_mutex;
 	pthread_mutex_t	lock;
 } t_all;
 
 long long	get_actual_time(void);
 long long	timestamp(long long start);
 void		*monitor(void *all_ptr);
+int			all_finished(t_coder *coder);
 
 #endif

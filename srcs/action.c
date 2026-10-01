@@ -1,16 +1,25 @@
-#include "../headers/codexion.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   action.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 00:43:17 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 01:28:48 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void	burnout_log(t_coder *coder)
-{
-	fprintf(stdout, "%lld %d has taken a dongle\n",
-		timestamp(coder->all->start_time), coder->id);
-	fprintf(stdout, "%lld %d has taken a dongle\n",
-		timestamp(coder->all->start_time), coder->id);
-}
+#include "../headers/codexion.h"
 
 void	print_log(t_coder *coder, int step)
 {
 	pthread_mutex_lock(&coder->all->lock);
+	// if (coder->all->is_burnout)
+	// {
+	// 	pthread_mutex_unlock(&coder->all->lock);
+	// 	return ;
+	// }
 	if (step == 1)
 		fprintf(stdout, "%lld %d is compiling\n",
 			timestamp(coder->all->start_time), coder->id);
@@ -21,7 +30,8 @@ void	print_log(t_coder *coder, int step)
 		fprintf(stdout, "%lld %d is refactoring\n",
 			timestamp(coder->all->start_time), coder->id);
 	else if (step == 4)
-		burnout_log(coder);
+		fprintf(stdout, "%lld %d has taken a dongle\n",
+			timestamp(coder->all->start_time), coder->id);
 	else if (step == 5)
 		fprintf(stdout, "%lld %d burned out\n",
 			timestamp(coder->all->start_time), coder->id);
@@ -30,11 +40,12 @@ void	print_log(t_coder *coder, int step)
 
 int	compile(t_coder *coder)
 {
+	pthread_mutex_lock(&coder->all->gle_lock);
+	coder->last_compile_start = get_actual_time();
+	pthread_mutex_unlock(&coder->all->gle_lock);
 	print_log(coder, 1);
 	usleep(coder->all->arguments->compile * 1000);
-	pthread_mutex_lock(&coder->all->gle_lock);
 	coder->compile_done++;
-	pthread_mutex_unlock(&coder->all->gle_lock);
 	coder->step = 2;
 	return (1);
 }

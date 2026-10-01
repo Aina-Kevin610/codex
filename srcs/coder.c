@@ -17,9 +17,33 @@ int	init_coder(t_all *all)
 		all->coder[i].all = all;
 		all->coder[i].last_compile_start = all->start_time;
 		all->coder[i].dongle_left = &all->dongle[i];
-		all->coder[i].dongle_right = &all->dongle[(i + 1)
-			% all->arguments->coders];
+		all->coder[i].dongle_right = &all->dongle[(i + 1) % all->arguments->coders];
 		i++;
+	}
+	return (1);
+}
+
+int	init_mutex_cond(t_all *all, int created)
+{
+	int	i;
+
+	i = created;
+	if (pthread_mutex_init(&all->dongle[i].dongle_lock, NULL) != 0)
+	{
+		while (--i >= 0)
+			pthread_mutex_destroy(&all->dongle[i].dongle_lock);
+		free(all->dongle);
+		all->dongle = NULL;
+		return (0);
+	}
+	i = created;
+	if (pthread_cond_init(&all->dongle[i].dongle_cond, NULL) != 0)
+	{
+		while (--i >= 0)
+			pthread_cond_destroy(&all->dongle[i].dongle_cond);
+		free(all->dongle);
+		all->dongle = NULL;
+		return (0);
 	}
 	return (1);
 }
@@ -40,14 +64,8 @@ int	init_dongle(t_all *all)
 		all->dongle[i].free_at = all->start_time;
 		all->dongle[i].request[0] = NULL;
 		all->dongle[i].request[1] = NULL;
-		if (pthread_mutex_init(&all->dongle[i].dongle_lock, NULL) != 0)
-		{
-			while (--i >= 0)
-				pthread_mutex_destroy(&all->dongle[i].dongle_lock);
-			free(all->dongle);
-			all->dongle = NULL;
+		if (!init_mutex_cond(all, i))
 			return (0);
-		}
 		i++;
 	}
 	return (1);
