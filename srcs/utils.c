@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 02:04:48 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 02:17:35 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/codexion.h"
 
 int	is_digit(char c)
@@ -12,8 +24,6 @@ int	ft_error(char *message)
 
 int	init_all(t_all *all)
 {
-	all->stop = 0;
-	all->is_burnout = 0;
 	if (!all)
 		return (0);
 	memset(all, 0, sizeof(*all));
@@ -59,42 +69,10 @@ void	free_requests(t_all *all)
 	}
 }
 
-void	print_coders(t_all *all)
-{
-	int	i;
-
-	if (!all || !all->coder || !all->arguments)
-		return ;
-	i = 0;
-	while (i < all->arguments->coders)
-	{
-		printf("coder_id: %d | dongle_left_id: %d | dongle_right_id: %d\n",
-			all->coder[i].id,
-			all->coder[i].dongle_left->id,
-			all->coder[i].dongle_right->id);
-		i++;
-	}
-}
-
 static void	print_request_id(t_request *request)
 {
 	if (request)
 		printf("%d", request->id_coder);
 	else
 		printf("-");
-}
-
-void	print_requests(t_coder *coder)
-{
-	if (!coder)
-		return ;
-	printf("(%d)[", coder->dongle_left->id);
-	print_request_id(coder->dongle_left->request[0]);
-	printf(", ");
-	print_request_id(coder->dongle_left->request[1]);
-	printf("] (%d)[", coder->dongle_right->id);
-	print_request_id(coder->dongle_right->request[0]);
-	printf(", ");
-	print_request_id(coder->dongle_right->request[1]);
-	printf("]\n");
 }

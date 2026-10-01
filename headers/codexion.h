@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 02:05:26 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 02:05:27 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CODEXION_H
 # define CODEXION_H
 
@@ -71,7 +83,6 @@ typedef struct s_request
 
 typedef struct s_all
 {
-	int				is_burnout;
 	int				stop;
 	int				finished_coders;
 	t_args			*arguments;
@@ -81,7 +92,6 @@ typedef struct s_all
 	pthread_t		monitor;
 	pthread_mutex_t	gle_lock;
 	pthread_cond_t	gle_cond;
-	pthread_mutex_t	stop_mutex;
 	pthread_mutex_t	lock;
 } t_all;
 
@@ -89,5 +99,9 @@ long long	get_actual_time(void);
 long long	timestamp(long long start);
 void		*monitor(void *all_ptr);
 int			all_finished(t_coder *coder);
+int			is_stopped(t_all *all);
+void		wake_all(t_all *all);
+void		lock_pair(t_dongle *a, t_dongle *b);
+void		unlock_pair(t_dongle *a, t_dongle *b);
 
 #endif

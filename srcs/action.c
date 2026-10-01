@@ -15,11 +15,11 @@
 void	print_log(t_coder *coder, int step)
 {
 	pthread_mutex_lock(&coder->all->lock);
-	// if (coder->all->is_burnout)
-	// {
-	// 	pthread_mutex_unlock(&coder->all->lock);
-	// 	return ;
-	// }
+	if (coder->all->stop)
+	{
+		pthread_mutex_unlock(&coder->all->lock);
+		return ;
+	}
 	if (step == 1)
 		fprintf(stdout, "%lld %d is compiling\n",
 			timestamp(coder->all->start_time), coder->id);
@@ -45,7 +45,9 @@ int	compile(t_coder *coder)
 	pthread_mutex_unlock(&coder->all->gle_lock);
 	print_log(coder, 1);
 	usleep(coder->all->arguments->compile * 1000);
+	pthread_mutex_lock(&coder->all->gle_lock);
 	coder->compile_done++;
+	pthread_mutex_unlock(&coder->all->gle_lock);
 	coder->step = 2;
 	return (1);
 }

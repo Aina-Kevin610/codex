@@ -6,18 +6,40 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 19:24:09 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/01 23:48:37 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/02 02:12:12 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/codexion.h"
+
+int	start_simulation(t_all *all)
+{
+	int	i;
+
+	if (!all || !all->coder || !all->arguments)
+		return (1);
+	reset_clock(all);
+	pthread_create(&all->monitor, NULL, monitor, all);
+	i = 0;
+	while (i < all->arguments->coders)
+	{
+		pthread_create(&all->coder[i].thread, NULL, process, &all->coder[i]);
+		i++;
+	}
+	i = 0;
+	while (i < all->arguments->coders)
+		pthread_join(all->coder[i++].thread, NULL);
+	pthread_join(all->monitor, NULL);
+	return (0);
+}
 
 int	main(int argc, char *argv[])
 {
 	t_all	all;
 
 	if (!init_all(&all))
-		return (ft_error("allocation or synchronization initialization failed"));
+		return (
+			ft_error("allocation or synchronization initialization failed"));
 	if (arg_check(argc, argv, &all))
 	{
 		ft_error("invalid arguments");

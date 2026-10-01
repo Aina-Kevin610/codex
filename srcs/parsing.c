@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 02:05:01 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 02:11:28 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/codexion.h"
 
 int	arg_check(int argc, char *argv[], t_all *all)
@@ -11,7 +23,7 @@ int	arg_check(int argc, char *argv[], t_all *all)
 int	number_check(char *number)
 {
 	long long	value;
-	int		i;
+	int			i;
 
 	if (!number || !number[0])
 		return (0);

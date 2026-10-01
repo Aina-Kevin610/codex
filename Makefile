@@ -12,7 +12,8 @@ SRCS = srcs/codexion.c \
 	srcs/request.c \
 	srcs/dongle.c \
 	srcs/time.c \
-	srcs/monitor.c
+	srcs/monitor.c \
+	srcs/sync.c
 
 OBJS = srcs/codexion.o \
 	srcs/parsing.o \
@@ -23,7 +24,8 @@ OBJS = srcs/codexion.o \
 	srcs/request.o \
 	srcs/dongle.o \
 	srcs/time.o \
-	srcs/monitor.o
+	srcs/monitor.o \
+	srcs/sync.o
 
 
 all: $(NAME)

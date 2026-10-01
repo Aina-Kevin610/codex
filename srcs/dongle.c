@@ -25,49 +25,53 @@ static int	am_i_priority(t_coder *coder, t_dongle *dongle)
 	return (1);
 }
 
-void	take_one(t_coder *coder, t_dongle *dongle)
+static int	take_one(t_coder *coder, t_dongle *dongle)
 {
-	pthread_mutex_lock(&dongle->dongle_lock);
 	struct timespec	ts;
 
-	while (!am_i_priority(coder, dongle))
+	pthread_mutex_lock(&dongle->dongle_lock);
+	while (!is_stopped(coder->all) && !am_i_priority(coder, dongle))
 	{
 		if (dongle->free_at > get_actual_time())
 		{
 			ts.tv_sec = dongle->free_at / 1000;
 			ts.tv_nsec = (dongle->free_at % 1000) * 1000000;
-			pthread_cond_timedwait(&dongle->dongle_cond, &dongle->dongle_lock, &ts);
+			pthread_cond_timedwait(&dongle->dongle_cond,
+				&dongle->dongle_lock, &ts);
 		}
 		else
 			pthread_cond_wait(&dongle->dongle_cond, &dongle->dongle_lock);
 	}
+	if (is_stopped(coder->all))
+	{
+		pthread_mutex_unlock(&dongle->dongle_lock);
+		return (0);
+	}
 	dongle->used_by = coder->id;
-	heap_pop(dongle, dongle->request);
+	free(heap_pop(dongle, dongle->request));
 	print_log(coder, 4);
 	pthread_mutex_unlock(&dongle->dongle_lock);
+	return (1);
 }
 
 int	take_dongle(t_coder *coder)
 {
 	if (coder->id % 2)
 	{
-		take_one(coder, coder->dongle_left);
-		take_one(coder, coder->dongle_right);
+		if (!take_one(coder, coder->dongle_left))
+			return (0);
+		return (take_one(coder, coder->dongle_right));
 	}
-	else
-	{
-		take_one(coder, coder->dongle_right);
-		take_one(coder, coder->dongle_left);
-	}
-	return (1);
+	if (!take_one(coder, coder->dongle_right))
+		return (0);
+	return (take_one(coder, coder->dongle_left));
 }
 
 void	release_dongle(t_coder *coder)
 {
 	long long	now;
 
-	pthread_mutex_lock(&coder->dongle_left->dongle_lock);
-	pthread_mutex_lock(&coder->dongle_right->dongle_lock);
+	lock_pair(coder->dongle_left, coder->dongle_right);
 	now = get_actual_time();
 	coder->dongle_left->used_by = 0;
 	coder->dongle_left->free_at = now
@@ -80,6 +84,5 @@ void	release_dongle(t_coder *coder)
 	}
 	pthread_cond_broadcast(&coder->dongle_left->dongle_cond);
 	pthread_cond_broadcast(&coder->dongle_right->dongle_cond);
-	pthread_mutex_unlock(&coder->dongle_left->dongle_lock);
-	pthread_mutex_unlock(&coder->dongle_right->dongle_lock);
+	unlock_pair(coder->dongle_left, coder->dongle_right);
 }

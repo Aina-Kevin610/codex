@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   coder.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 02:05:13 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 02:09:46 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/codexion.h"
 
 int	init_coder(t_all *all)
@@ -17,7 +29,8 @@ int	init_coder(t_all *all)
 		all->coder[i].all = all;
 		all->coder[i].last_compile_start = all->start_time;
 		all->coder[i].dongle_left = &all->dongle[i];
-		all->coder[i].dongle_right = &all->dongle[(i + 1) % all->arguments->coders];
+		all->coder[i].dongle_right = &all->dongle[(i + 1)
+			% all->arguments->coders];
 		i++;
 	}
 	return (1);
@@ -84,6 +97,7 @@ void	free_simulation(t_all *all)
 		while (i < all->arguments->coders)
 		{
 			pthread_mutex_destroy(&all->dongle[i].dongle_lock);
+			pthread_cond_destroy(&all->dongle[i].dongle_cond);
 			i++;
 		}
 	}

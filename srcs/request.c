@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   request.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 02:04:55 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 02:16:10 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/codexion.h"
 
 void	heap_push(t_request data, t_request **heap, t_dongle *dongle)
@@ -26,22 +38,6 @@ t_request	*heap_pop(t_dongle *dongle, t_request **heap)
 	heap[dongle->heap_size - 1] = NULL;
 	dongle->heap_size--;
 	return (tmp);
-}
-
-int	request(t_coder *coder, t_dongle *dongle)
-{
-	t_request	new_request;
-
-	if (!coder || !dongle)
-		return (0);
-	new_request.id_coder = coder->id;
-	new_request.created_at = get_actual_time();
-	new_request.deadline = coder->last_compile_start
-		+ coder->all->arguments->burnout;
-	heap_push(new_request, dongle->request, dongle);
-	if (dongle->heap_size == 2)
-		heapify(&coder->all->arguments->scheduler, dongle);
-	return (1);
 }
 
 void	heapify(t_scheduler *scheduler, t_dongle *dongle)

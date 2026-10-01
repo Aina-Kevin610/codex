@@ -1,22 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/02 02:03:37 by airandri          #+#    #+#             */
+/*   Updated: 2026/10/02 02:12:20 by airandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/codexion.h"
 
 int	all_finished(t_coder *coder)
 {
 	int	finished;
 
-	finished = 0;
 	pthread_mutex_lock(&coder->all->gle_lock);
-	if (coder->compile_done >= coder->all->arguments->nb_compiles)
-	{
-		finished = 1;
-		coder->finished = 1;
-		coder->all->finished_coders++;
-		if (coder->all->finished_coders == coder->all->arguments->coders)
-		{
-			coder->all->stop = 1;
-			pthread_cond_broadcast(&coder->all->gle_cond);
-		}
-	}
+	finished = coder->compile_done >= coder->all->arguments->nb_compiles;
 	pthread_mutex_unlock(&coder->all->gle_lock);
 	return (finished);
 }
@@ -26,17 +27,15 @@ static int	add_requests(t_coder *coder)
 	int	ok;
 
 	ok = 1;
-	pthread_mutex_lock(&coder->dongle_left->dongle_lock);
-	pthread_mutex_lock(&coder->dongle_right->dongle_lock);
-	if (coder->all->stop)
+	lock_pair(coder->dongle_left, coder->dongle_right);
+	if (is_stopped(coder->all))
 		ok = 0;
 	else if (!request(coder, coder->dongle_left))
 		ok = 0;
 	else if (coder->dongle_right != coder->dongle_left
 		&& !request(coder, coder->dongle_right))
 		ok = 0;
-	pthread_mutex_unlock(&coder->dongle_left->dongle_lock);
-	pthread_mutex_unlock(&coder->dongle_right->dongle_lock);
+	unlock_pair(coder->dongle_left, coder->dongle_right);
 	return (ok);
 }
 
@@ -47,21 +46,13 @@ void	*process(void *coders)
 	coder = (t_coder *)coders;
 	if (!coder)
 		return (NULL);
-	while (1)
+	while (!is_stopped(coder->all))
 	{
-		pthread_mutex_lock(&coder->all->gle_lock);
-		if (coder->all->stop)
-		{
-			pthread_mutex_unlock(&coder->all->gle_lock);
+		if (!add_requests(coder) || !take_dongle(coder))
 			break ;
-		}
-		pthread_mutex_unlock(&coder->all->gle_lock);
-		if (!add_requests(coder))
-			break ;
-		take_dongle(coder);
 		compile(coder);
 		release_dongle(coder);
-		if (all_finished(coder) || coder->all->is_burnout)
+		if (all_finished(coder) || is_stopped(coder->all))
 			break ;
 		debug(coder);
 		refactor(coder);
@@ -69,33 +60,16 @@ void	*process(void *coders)
 	return (NULL);
 }
 
-int	start_simulation(t_all *all)
+static void	reset_clock(t_all *all)
 {
 	int	i;
 
-	if (!all || !all->coder || !all->arguments)
-		return (1);
-	pthread_create(&all->monitor, NULL, monitor, all);
+	all->start_time = get_actual_time();
 	i = 0;
 	while (i < all->arguments->coders)
 	{
-		pthread_create(&all->coder[i].thread, NULL, process,
-			&all->coder[i]);
-		pthread_mutex_lock(&all->gle_lock);
-		pthread_cond_broadcast(&all->gle_cond);
-		pthread_mutex_unlock(&all->gle_lock);
+		all->coder[i].last_compile_start = all->start_time;
+		all->dongle[i].free_at = all->start_time;
 		i++;
 	}
-	i = 0;
-	while (i < all->arguments->coders)
-	{
-		pthread_join(all->coder[i].thread, NULL);
-		i++;
-	}
-	pthread_mutex_lock(&all->gle_lock);
-	all->stop = 1;
-	pthread_cond_broadcast(&all->gle_cond);
-	pthread_mutex_unlock(&all->gle_lock);
-	pthread_join(all->monitor, NULL);
-	return (0);
 }

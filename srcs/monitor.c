@@ -12,23 +12,61 @@
 
 #include "../headers/codexion.h"
 
-int	check_burnout(t_coder *coders)
+static int	all_done(t_all *all)
 {
-	int		i;
-	long	now;
+	int	i;
+	int	done;
+
+	done = 1;
+	i = 0;
+	pthread_mutex_lock(&all->gle_lock);
+	while (i < all->arguments->coders)
+	{
+		if (all->coder[i].compile_done < all->arguments->nb_compiles)
+			done = 0;
+		i++;
+	}
+	pthread_mutex_unlock(&all->gle_lock);
+	return (done);
+}
+
+static int	has_burned(t_all *all, int i)
+{
+	long long	last;
+	int			done;
+
+	pthread_mutex_lock(&all->gle_lock);
+	last = all->coder[i].last_compile_start;
+	done = all->coder[i].compile_done >= all->arguments->nb_compiles;
+	pthread_mutex_unlock(&all->gle_lock);
+	if (done)
+		return (0);
+	return (get_actual_time() - last >= all->arguments->burnout);
+}
+
+static void	declare_stop(t_all *all, int id)
+{
+	pthread_mutex_lock(&all->lock);
+	if (!all->stop)
+	{
+		all->stop = 1;
+		if (id)
+			printf("%lld %d burned out\n", timestamp(all->start_time), id);
+	}
+	pthread_mutex_unlock(&all->lock);
+	wake_all(all);
+}
+
+static int	check_burnout(t_all *all)
+{
+	int	i;
 
 	i = 0;
-	while (i < coders->all->arguments->coders)
+	while (i < all->arguments->coders)
 	{
-		now = timestamp(coders[i].all->start_time);
-		if (now - coders[i].last_compile_start > coders->all->arguments->burnout)
+		if (has_burned(all, i))
 		{
-			pthread_mutex_lock(&coders[i].all->stop_mutex);
-			coders[i].all->is_burnout = 1;
-			pthread_mutex_unlock(&coders[i].all->stop_mutex);
-			pthread_cond_broadcast(&coders->dongle_left->dongle_cond);
-			pthread_cond_broadcast(&coders->dongle_right->dongle_cond);
-			print_log(&coders[i], 5);
+			declare_stop(all, all->coder[i].id);
 			return (1);
 		}
 		i++;
@@ -38,13 +76,18 @@ int	check_burnout(t_coder *coders)
 
 void	*monitor(void *arg)
 {
-	t_coder	*coder;
+	t_all	*all;
 
-	coder = (t_coder *)arg;
+	all = (t_all *)arg;
 	while (1)
 	{
-		if (check_burnout(coder) || all_finished(coder))
+		if (check_burnout(all))
 			break ;
+		if (all_done(all))
+		{
+			declare_stop(all, 0);
+			break ;
+		}
 		usleep(1000);
 	}
 	return (NULL);
