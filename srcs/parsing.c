@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:05:01 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/02 02:11:28 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/13 09:33:42 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	number_check(char *number)
 			return (0);
 		i++;
 	}
-	return (value > 0);
+	return (value >= 0);
 }
 
 void	assign_arg(char **init, t_args *arg)

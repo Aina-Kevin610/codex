@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:04:48 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/02 02:17:35 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/13 09:19:34 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,4 @@ void	free_requests(t_all *all)
 		all->dongle[i].heap_size = 0;
 		i++;
 	}
-}
-
-static void	print_request_id(t_request *request)
-{
-	if (request)
-		printf("%d", request->id_coder);
-	else
-		printf("-");
 }

@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:05:26 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/02 02:05:27 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/13 09:19:10 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,6 @@ int			is_stopped(t_all *all);
 void		wake_all(t_all *all);
 void		lock_pair(t_dongle *a, t_dongle *b);
 void		unlock_pair(t_dongle *a, t_dongle *b);
+void		reset_clock(t_all *all);
 
 #endif

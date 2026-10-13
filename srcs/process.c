@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:03:37 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/02 02:12:20 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/13 09:20:39 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	all_finished(t_coder *coder)
 	return (finished);
 }
 
-static int	add_requests(t_coder *coder)
+int	add_requests(t_coder *coder)
 {
 	int	ok;
 
@@ -60,7 +60,7 @@ void	*process(void *coders)
 	return (NULL);
 }
 
-static void	reset_clock(t_all *all)
+void	reset_clock(t_all *all)
 {
 	int	i;
 

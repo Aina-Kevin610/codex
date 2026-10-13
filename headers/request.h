@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:05:38 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/02 02:05:39 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/13 09:30:51 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ typedef struct s_request t_request;
 typedef struct s_dongle t_dongle;
 typedef struct s_scheduler t_scheduler;
 
+int	        add_requests(t_coder *coder);
 int			request(t_coder *coder, t_dongle *dongle);
+void		edf_sort(t_request *request[2]);
+void		fifo_sort(t_request *request[2]);
+void		heapify(t_scheduler *scheduler, t_dongle *dongle);
 void		heap_push(t_request data, t_request **heap, t_dongle *dongle);
 t_request	*heap_pop(t_dongle *dongle, t_request **heap);
-void		fifo_sort(t_request *request[2]);
-void		edf_sort(t_request *request[2]);
-void		heapify(t_scheduler *scheduler, t_dongle *dongle);
 
 #endif
