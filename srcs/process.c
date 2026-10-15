@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:03:37 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/13 09:20:39 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/15 22:38:50 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ void	*process(void *coders)
 			break ;
 		compile(coder);
 		release_dongle(coder);
-		if (all_finished(coder) || is_stopped(coder->all))
-			break ;
 		debug(coder);
 		refactor(coder);
+		if (all_finished(coder) || is_stopped(coder->all))
+			break ;
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:05:26 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/13 09:19:10 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/15 18:34:34 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,15 @@ typedef struct s_all
 	pthread_mutex_t	lock;
 } t_all;
 
-long long	get_actual_time(void);
-long long	timestamp(long long start);
-void		ft_sleep(t_all *all, long long ms);
-void		*monitor(void *all_ptr);
-int			all_finished(t_coder *coder);
 int			is_stopped(t_all *all);
+int			all_finished(t_coder *coder);
 void		wake_all(t_all *all);
+void		reset_clock(t_all *all);
+void		*monitor(void *all_ptr);
+void		ft_sleep(t_all *all, long long ms);
 void		lock_pair(t_dongle *a, t_dongle *b);
 void		unlock_pair(t_dongle *a, t_dongle *b);
-void		reset_clock(t_all *all);
+long long	get_actual_time(void);
+long long	timestamp(long long start);
 
 #endif
