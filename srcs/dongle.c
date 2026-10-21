@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 01:32:55 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/21 19:38:35 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/21 22:07:41 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,6 @@ static void	grab(t_coder *coder)
 	}
 }
 
-int	able(t_coder *coder)
-{
-	pthread_mutex_lock(&coder->dongle_left->dongle_lock);
-	if (!coder->dongle_left->used_by && !coder->dongle_left->used_by)
-	{
-		pthread_mutex_unlock(&coder->dongle_left->dongle_lock);
-		return (1);
-	}
-	pthread_mutex_unlock(&coder->dongle_left->dongle_lock);
-	return(0);
-}
-
 int	take_dongle(t_coder *coder)
 {
 	t_dongle	*l;
@@ -91,7 +79,7 @@ int	take_dongle(t_coder *coder)
 			unlock_pair(l, r);
 			return (0);
 		}
-		if (ready(coder, l) && ready(coder, r))
+		if (ready(coder, l) && ready(coder, r) )
 		{
 			grab(coder);
 			unlock_pair(l, r);
@@ -99,7 +87,7 @@ int	take_dongle(t_coder *coder)
 		}
 		if (!ready(coder, l))
 			wait_blocker(coder, l, r);
-		else
+		if (!ready(coder, r))
 			wait_blocker(coder, r, l);
 	}
 }

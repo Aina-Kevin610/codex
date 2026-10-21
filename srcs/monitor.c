@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 01:19:57 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/02 01:37:03 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/21 22:39:13 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static void	declare_stop(t_all *all, int id)
 	pthread_mutex_lock(&all->lock);
 	if (!all->stop)
 	{
+	fprintf(stderr, "finished\n");
 		all->stop = 1;
 		if (id)
 			printf("%lld %d burned out\n", timestamp(all->start_time), id);
@@ -73,6 +74,7 @@ static int	check_burnout(t_all *all)
 	}
 	return (0);
 }
+
 
 void	*monitor(void *arg)
 {
