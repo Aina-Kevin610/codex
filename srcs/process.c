@@ -52,6 +52,16 @@ static int	after_take(t_coder *coder)
 	return (0);
 }
 
+static int	finish_if_done(t_coder *coder)
+{
+	if (!all_finished(coder))
+		return (0);
+	pthread_mutex_lock(&coder->all->gle_lock);
+	coder->finished = 1;
+	pthread_mutex_unlock(&coder->all->gle_lock);
+	return (1);
+}
+
 void	*process(void *coders)
 {
 	t_coder	*coder;
@@ -66,14 +76,7 @@ void	*process(void *coders)
 		release_dongle(coder);
 		debug(coder);
 		refactor(coder);
-		if (all_finished(coder))
-		{
-			pthread_mutex_lock(&coder->all->gle_lock);
-			coder->finished = 1;
-			pthread_mutex_unlock(&coder->all->gle_lock);
-			break ;
-		}
-		if (is_stopped(coder->all))
+		if (finish_if_done(coder) || is_stopped(coder->all))
 			break ;
 	}
 	return (NULL);

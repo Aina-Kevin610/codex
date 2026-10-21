@@ -18,13 +18,7 @@ SRCS = srcs/codexion.c \
 
 OBJS = $(SRCS:.c=.o)
 
-HEADERS = headers/codexion.h \
-	headers/parsing.h \
-	headers/utils.h \
-	headers/coder.h \
-	headers/action.h \
-	headers/request.h \
-	headers/dongle.h
+HEADERS = headers/codexion.h
 
 all: $(NAME)
 

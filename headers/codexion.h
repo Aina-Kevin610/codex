@@ -20,13 +20,6 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-# include "parsing.h"
-# include "utils.h"
-# include "coder.h"
-# include "action.h"
-# include "request.h"
-# include "dongle.h"
-
 typedef struct s_coder t_coder;
 typedef struct s_request t_request;
 typedef struct s_all t_all;
@@ -106,5 +99,31 @@ void		lock_pair(t_dongle *a, t_dongle *b);
 void		unlock_pair(t_dongle *a, t_dongle *b);
 long long	get_actual_time(void);
 long long	timestamp(long long start);
+int			arg_check(int argc, char *argv[], t_all *all);
+int			number_check(char *number, int allow_zero);
+void		assign_arg(char **init, t_args *arg);
+int			check_arg(char **arg);
+t_args		parsing(char **argv, t_args *arg);
+int			is_digit(char c);
+int			init_all(t_all *all);
+int			ft_error(char *message);
+int			init_coder(t_all *all);
+int			init_dongle(t_all *all);
+void		free_simulation(t_all *all);
+void		*process(void *coders);
+int			start_simulation(t_all *all);
+void		print_log(t_coder *coder, int step);
+int			compile(t_coder *coder);
+int			debug(t_coder *coder);
+int			refactor(t_coder *coder);
+int			take_dongle(t_coder *coder);
+void		release_dongle(t_coder *coder);
+int			request(t_coder *coder, t_dongle *dongle);
+int			add_requests(t_coder *coder);
+void		heap_push(t_dongle *dongle, t_request data, t_scheduler *scheduler);
+void		heap_remove(t_dongle *dongle, int id_coder,
+				t_scheduler *scheduler);
+void		sift_up(t_dongle *dongle, int i, t_scheduler *scheduler);
+void		sift_down(t_dongle *dongle, int i, t_scheduler *scheduler);
 
 #endif
