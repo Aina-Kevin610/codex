@@ -66,7 +66,14 @@ void	*process(void *coders)
 		release_dongle(coder);
 		debug(coder);
 		refactor(coder);
-		if (all_finished(coder) || is_stopped(coder->all))
+		if (all_finished(coder))
+		{
+			pthread_mutex_lock(&coder->all->gle_lock);
+			coder->finished = 1;
+			pthread_mutex_unlock(&coder->all->gle_lock);
+			break ;
+		}
+		if (is_stopped(coder->all))
 			break ;
 	}
 	return (NULL);

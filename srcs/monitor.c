@@ -22,7 +22,7 @@ static int	all_done(t_all *all)
 	pthread_mutex_lock(&all->gle_lock);
 	while (i < all->arguments->coders)
 	{
-		if (all->coder[i].compile_done < all->arguments->nb_compiles)
+		if (!all->coder[i].finished)
 			done = 0;
 		i++;
 	}

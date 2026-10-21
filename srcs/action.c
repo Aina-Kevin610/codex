@@ -54,6 +54,8 @@ int	compile(t_coder *coder)
 
 int	debug(t_coder *coder)
 {
+	if (all_finished(coder))
+		return (0);
 	print_log(coder, 2);
 	ft_sleep(coder->all, coder->all->arguments->debug);
 	coder->step = 3;
@@ -62,6 +64,8 @@ int	debug(t_coder *coder)
 
 int	refactor(t_coder *coder)
 {
+	if (all_finished(coder))
+		return (0);
 	print_log(coder, 3);
 	ft_sleep(coder->all, coder->all->arguments->refactor);
 	coder->step = 1;
