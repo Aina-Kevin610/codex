@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 01:32:55 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/02 01:32:56 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/21 18:26:44 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	wait_blocker(t_coder *coder, t_dongle *blocker, t_dongle *other)
 	struct timespec	ts;
 
 	coder->blocked = !(blocker->used_by == 0 && blocker->heap_size > 0
-		&& blocker->heap[0].id_coder == coder->id);
+			&& blocker->heap[0].id_coder == coder->id);
 	if (other != blocker)
 	{
 		pthread_cond_broadcast(&other->dongle_cond);
