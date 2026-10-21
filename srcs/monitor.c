@@ -6,29 +6,11 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 01:19:57 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/21 22:39:13 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/21 23:41:20 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/codexion.h"
-
-static int	all_done(t_all *all)
-{
-	int	i;
-	int	done;
-
-	done = 1;
-	i = 0;
-	pthread_mutex_lock(&all->gle_lock);
-	while (i < all->arguments->coders)
-	{
-		if (!all->coder[i].finished)
-			done = 0;
-		i++;
-	}
-	pthread_mutex_unlock(&all->gle_lock);
-	return (done);
-}
 
 static int	has_burned(t_all *all, int i)
 {
@@ -49,7 +31,6 @@ static void	declare_stop(t_all *all, int id)
 	pthread_mutex_lock(&all->lock);
 	if (!all->stop)
 	{
-	fprintf(stderr, "finished\n");
 		all->stop = 1;
 		if (id)
 			printf("%lld %d burned out\n", timestamp(all->start_time), id);
@@ -57,6 +38,26 @@ static void	declare_stop(t_all *all, int id)
 	pthread_mutex_unlock(&all->lock);
 	wake_all(all);
 }
+
+int ft_is_all_finished(t_all *all)
+{
+	int	i;
+
+	i = 0;
+	pthread_mutex_lock(&all->gle_lock);
+	while (i < all->arguments->coders)
+	{
+		if (all->coder[i].compile_done < all->arguments->nb_compiles)
+		{
+			pthread_mutex_unlock(&all->gle_lock);
+			return (0);
+		}
+		i++;
+	}
+	pthread_mutex_unlock(&all->gle_lock);
+	return (1);
+}
+
 
 static int	check_burnout(t_all *all)
 {
@@ -75,7 +76,6 @@ static int	check_burnout(t_all *all)
 	return (0);
 }
 
-
 void	*monitor(void *arg)
 {
 	t_all	*all;
@@ -85,7 +85,7 @@ void	*monitor(void *arg)
 	{
 		if (check_burnout(all))
 			break ;
-		if (all_done(all))
+		if (ft_is_all_finished(all))
 		{
 			declare_stop(all, 0);
 			break ;
