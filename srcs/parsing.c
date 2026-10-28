@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:05:01 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/21 23:40:51 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/22 00:08:28 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	check_arg(char **arg)
 	i = 1;
 	while (i <= 7)
 	{
-		if (!number_check(arg[i], i == 4 || i == 5 || i == 7))
+		if (!number_check(arg[i], 0))
 			return (0);
 		i++;
 	}

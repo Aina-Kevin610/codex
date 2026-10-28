@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 01:19:57 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/21 23:41:20 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:29:19 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	declare_stop(t_all *all, int id)
 	wake_all(all);
 }
 
-int ft_is_all_finished(t_all *all)
+int	ft_is_all_finished(t_all *all)
 {
 	int	i;
 
@@ -57,7 +57,6 @@ int ft_is_all_finished(t_all *all)
 	pthread_mutex_unlock(&all->gle_lock);
 	return (1);
 }
-
 
 static int	check_burnout(t_all *all)
 {

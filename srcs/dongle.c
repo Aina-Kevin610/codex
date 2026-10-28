@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 01:32:55 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/21 22:07:41 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:30:02 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	take_dongle(t_coder *coder)
 			unlock_pair(l, r);
 			return (0);
 		}
-		if (ready(coder, l) && ready(coder, r) )
+		if (ready(coder, l) && ready(coder, r))
 		{
 			grab(coder);
 			unlock_pair(l, r);

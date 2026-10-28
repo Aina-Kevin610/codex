@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:05:26 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/15 18:34:34 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:35:40 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,22 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-typedef struct s_coder t_coder;
-typedef struct s_request t_request;
-typedef struct s_all t_all;
+typedef struct s_coder		t_coder;
+typedef struct s_request	t_request;
+typedef struct s_all		t_all;
 
 typedef struct s_scheduler
 {
 	int	fifo;
 	int	edf;
-} t_scheduler;
+}	t_scheduler;
 
 typedef struct s_request
 {
 	int			id_coder;
 	long long	created_at;
 	long long	deadline;
-} t_request;
+}	t_request;
 
 typedef struct s_dongle
 {
@@ -46,7 +46,7 @@ typedef struct s_dongle
 	pthread_cond_t	dongle_cond;
 	int				heap_size;
 	t_request		heap[2];
-} t_dongle;
+}	t_dongle;
 
 typedef struct s_args
 {
@@ -59,7 +59,7 @@ typedef struct s_args
 	int			dongle_cooldown;
 	int			error;
 	t_scheduler	scheduler;
-} t_args;
+}	t_args;
 
 typedef struct s_coder
 {
@@ -73,7 +73,7 @@ typedef struct s_coder
 	t_dongle	*dongle_right;
 	long long	last_compile_start;
 	pthread_t	thread;
-} t_coder;
+}	t_coder;
 
 typedef struct s_all
 {
@@ -87,7 +87,7 @@ typedef struct s_all
 	pthread_mutex_t	gle_lock;
 	pthread_cond_t	gle_cond;
 	pthread_mutex_t	lock;
-} t_all;
+}	t_all;
 
 int			is_stopped(t_all *all);
 int			all_finished(t_coder *coder);
