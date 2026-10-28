@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 02:05:01 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/28 19:02:48 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/28 21:13:14 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ int	arg_check(int argc, char *argv[], t_all *all)
 	if (argc != 9)
 		return (1);
 	*(all->arguments) = parsing(argv, all->arguments);
-	if (all->arguments->nb_compiles == 0
-		|| all->arguments->compile == 0
-		|| all->arguments->debug == 0
-		|| all->arguments->refactor == 0)
+	if (all->arguments->coders <= 0 || all->arguments->burnout <= 0
+		|| all->arguments->compile <= 0 || all->arguments->debug <= 0
+		|| all->arguments->refactor <= 0 || all->arguments->nb_compiles <= 0
+		|| all->arguments->dongle_cooldown < 0)
 		return (1);
 	return (all->arguments->error);
 }

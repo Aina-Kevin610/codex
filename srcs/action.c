@@ -6,7 +6,7 @@
 /*   By: airandri <airandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 00:43:17 by airandri          #+#    #+#             */
-/*   Updated: 2026/10/28 18:32:14 by airandri         ###   ########.fr       */
+/*   Updated: 2026/10/28 21:13:14 by airandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	compile(t_coder *coder)
 
 	compile = coder->all->arguments->compile;
 	pthread_mutex_lock(&coder->all->gle_lock);
-	coder->last_compile_start = get_actual_time() + compile;
+	coder->last_compile_start = get_actual_time();
 	pthread_mutex_unlock(&coder->all->gle_lock);
 	print_log(coder, 1);
 	pthread_mutex_lock(&coder->all->gle_lock);
